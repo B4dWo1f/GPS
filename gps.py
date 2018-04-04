@@ -38,34 +38,6 @@ def date2timestamp(fecha,epoch=dt.datetime(1970, 1, 1)):
    timestamp = (fecha - epoch) // dt.timedelta(seconds=1) # Integer
    return timestamp #(dt - epoch) // dt.timedelta(seconds=1)
 
-def kml2csv(fname,f_out=None):
-   """
-    Parses a google kml file.
-    if f_out is an string, write the data to a csv file with format:
-      day, month, year, hour, minute, second, lon, lat, height above ground
-    Returns a list of points with shape:
-             ( (lon,lat,height above ground), date )
-   """
-   lines = open(fname,'r').readlines()
-   points = []
-   for i in range(7,len(lines)-4,2):
-      date = lines[i].lstrip().rstrip()
-      pos = lines[i+1].lstrip().rstrip()
-      # Parse position
-      aux = list(map(float,pos.split('>')[1].split('<')[0].split()))
-      # Parse date
-      D = date.split('>')[1].split('<')[0]
-      D = dt.datetime.strptime(D,'%Y-%m-%dT%H:%M:%SZ')
-      points.append( (np.array(aux),D) )
-   if isinstance(f_out,str):
-      s = ','
-      with open(f_out,'w') as f:
-         for p in points:
-            r,t = p
-            t = t.strftime('%d,%m,%Y,%H,%M,%S')
-            f.write(t+s+str(r[0])+s+str(r[1])+s+str(r[2])+'\n')
-   return points
-
 
 def read_csv(fname):
    """
@@ -81,3 +53,16 @@ def read_csv(fname):
       date = dt.datetime(*date)
       points.append( (np.array([lat[i],lon[i],alt[i]]),date) )
    return points
+
+if __name__ == '__main__':
+    #f = 'data/flight-2017-11-18-14-59-38.gpx'
+    f = 'data/Historialdeubicaciones.kml'
+    #A = gpx2csv(f)
+    #print(A.describe())
+    #print(type(A['time'][0]))
+    #exit()
+    #fmt = '%d/%m/%Y %H:%M'
+    #fmt = '%d,%m,%Y,%H,%M,%S'
+    #A.to_csv('test.csv', date_format=fmt)
+    import IO
+    IO.kml(f)

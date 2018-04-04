@@ -9,6 +9,7 @@ import gpxpy.gpx
 # Parsing an existing file:
 # -------------------------
 f = 'data/flight-2017-11-18-14-59-38.gpx'
+f = '/home/noel/Dropbox/Bu-Noel/ceci/141486.gpx'
 gpx_file = open(f, 'r')
 gpx = gpxpy.parse(gpx_file)
 
